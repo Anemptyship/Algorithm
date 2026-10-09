@@ -1,0 +1,39 @@
+--- studio_app.server.py	2026-10-09 16:51:02.257784625 +0000
++++ studio_app.py	2026-10-09 16:51:09.883289427 +0000
+@@ -1164,6 +1164,7 @@
+ import ltx_dance_trial
+ import scail_trial
+ import scail_repair
++import ops_assistant
+ import scail_generation
+ scail_generation.impl = _impl
+ scail_trial.impl = _impl
+@@ -1178,7 +1179,7 @@
+      'wan_kernel_probe': wan_kernel_probe.run,
+      'ltx_dance_prepare': ltx_dance_trial.prepare, 'ltx_dance_trial': ltx_dance_trial.run,
+      'scail_prepare': scail_trial.prepare, 'scail_trial': scail_trial.run,
+-     'scail': scail_generation.run, 'scail_repair': scail_repair.run})
++     'scail': scail_generation.run, 'scail_repair': scail_repair.run, 'ops_assistant': ops_assistant.run})
+ import video_queue_pause
+ video_queue_pause.configure(app, _impl)
+ wan_generation.configure(app, _impl, _durable_video)
+@@ -1192,6 +1193,7 @@
+ scail_repair.configure(app, _impl, _durable_video)
+ import scail_live
+ scail_live.configure(app, _impl, _durable_video)
++ops_assistant.configure(app, _impl, _durable_video)
+ ltx_lab.configure(app, _impl, _lab_generate)
+ 
+ import chat_browser
+@@ -1230,6 +1232,11 @@
+     from fastapi.responses import FileResponse
+     return FileResponse(APP_DIR / 'studio_static/scail-live.html', headers={'Cache-Control':'no-store'})
+ 
++@app.get('/ops-assistant', include_in_schema=False)
++def ops_assistant_page():
++    from fastapi.responses import FileResponse
++    return FileResponse(APP_DIR / 'studio_static/ops-assistant.html', headers={'Cache-Control':'no-store'})
++
+ import video_history
+ video_history.configure(app, _impl, APP_DIR / 'video_history_data')
+ 
